@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/qrCreate.css" rel="stylesheet" type="text/css" />
+    <script src="script/menu.js"></script>
+   
+    <title>Create QrCode</title>
+    
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="#">ScanTrack</a>
+        </div>
+        <nav>
+          <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+          <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="qrCreate.html" class="btn-signup">Create</a></li>
+          </ul>
+          <!-- Mobile Menu -->
+          <ul class="mobile-menu">
+            <li><a href="#">Home</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="qrCreate.html" class="btn-signup">Create</a></li>
+          </ul>
+        </nav>
+    </header>
+
+<div class="container">
+  <h1>QR Code Generator</h1>
+  <form id="qrForm">
+    <label for="studentId">Student ID:</label>
+    <input type="text" id="studentId" placeholder="Enter Student ID" required>
+    <div class="error" id="studentIdError">Please enter a valid Student ID.</div>
+
+    <label for="gradeLevel">Grade Level:</label>
+    <input type="text" id="gradeLevel" placeholder="Enter Grade Level" required>
+    <div class="error" id="gradeLevelError">Please enter a valid Grade Level.</div>
+
+    <label for="studentName">Student Name:</label>
+    <input type="text" id="studentName" placeholder="Enter Student Name" required>
+    <div class="error" id="studentNameError">Please enter a valid Student Name.</div>
+
+    <button type="submit">Generate QR Code <span class="loading" id="loadingSpinner" style="display: none;"></span></button>
+  </form>
+  <div class="success" id="successMessage">QR Code generated successfully!</div>
+  <div id="qrCodeContainer"></div>
+  <button id="downloadBtn">Download QR Code</button>
+</div>
+<script src="script/qrCreate.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</body>
+</html>

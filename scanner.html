@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link href="css/scanner.css" rel="stylesheet" type="text/css" />
+
+        <script src="script/menu.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-database.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    
+    <title>Scan</title>
+    
+    
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <a href="#">ScanTrack</a>
+        </div>
+        <nav>
+          <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+          <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="qrCreate.html" class="btn-signup">Create</a></li>
+          </ul>
+          <!-- Mobile Menu -->
+          <ul class="mobile-menu">
+            <li><a href="#">Home</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="docs.html">Docs</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="qrCreate.html" class="btn-signup">Create</a></li>
+          </ul>
+        </nav>
+    </header>
+
+<div id="container">
+
+      <!-- QR Code Scanner Section -->
+      <div id="wholeQrContent">
+        <h2>QR-Scanner</h2>
+        <div id="my-qr-reader"></div>
+        <br>
+        <input type="text" id="qrClassName" placeholder="Class Name">
+        <input type="number" id="qrRoom" placeholder="Room Number">
+        
+        <select id="attendanceStatus">
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+          <option value="excused">Excused</option>
+        </select>
+        <button onclick="openAddClassModal()">Add Class</button>
+        <button onclick="openAddRoomModal()">Add Room</button>
+      </div>
+
+      <!-- Manual Marking Section -->
+      <div id="manual">
+        <h2>Manual Marking</h2>
+        <input type="number" id="manualStudentId" placeholder="Student ID">
+        <input type="text" id="manualStudentName" placeholder="Student Name">
+        <input type="number" id="manualGradeLevel" placeholder="Grade Level">
+        <input type="text" id="manualClassName" placeholder="Class Name">
+         <input type="number" id="manualRoom" placeholder="Room">
+       
+        <select id="manualStatus">
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+          <option value="excused">Excused</option>
+        </select>
+        <button onclick="manualMarkAttendance()">Mark Attendance</button>
+      </div>
+      <br>
+    </div>
+    <script src="script/scanner.js"></script>
+<!-- Footer -->
+<footer>
+  <p>&copy; 2024 ScanTrack. All rights reserved.</p>
+</footer>
+</body>
+    
+</html>
