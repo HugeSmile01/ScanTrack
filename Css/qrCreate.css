@@ -1,0 +1,106 @@
+body {
+  background-color: #20232a;
+}
+
+.container {
+    background: #20232a;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    
+
+    /* Centering the container */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+        h1 {
+            color: #61dafb;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            color: #61dafb;
+            margin-top: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .success {
+            color: #2ecc71;
+            font-size: 1em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin-top: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #qrCodeContainer {
+            margin-top: 20px;
+            display: none;
+        }
+
+        #downloadBtn {
+            background-color: #28a745;
+            display: none;
+        }
+
+        #downloadBtn:hover {
+            background-color: #218838;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
