@@ -1,4 +1,4 @@
-        /* Reset some basic styles */
+  /* Reset some basic styles */
         * {
             margin: 0;
             padding: 0;
@@ -285,4 +285,82 @@ footer {
     text-align: center;
     background-color: white;
     margin-top: 20px;
+}
+.documentation {
+  max-width: 800px;
+  margin: 50px auto;
+  /* Center the documentation section on the page */
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  line-height: 1.6;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.documentation h2 {
+  font-size: 2em;
+  color: #007BFF;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.documentation h3 {
+  font-size: 1.5em;
+  color: #0056b3;
+  margin-bottom: 15px;
+}
+
+.documentation p {
+  margin-bottom: 15px;
+  font-size: 1em;
+  color: #555;
+}
+
+.documentation ol,
+.documentation ul {
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.documentation ol li,
+.documentation ul li {
+  margin-bottom: 10px;
+}
+
+.documentation a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.documentation a:hover {
+  text-decoration: underline;
+}
+
+.documentation code {
+  background-color: #f1f1f1;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.documentation pre {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-left: 4px solid #007BFF;
+  overflow-x: auto;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: 'Courier New', Courier, monospace;
+  margin-bottom: 20px;
+}
+
+.documentation blockquote {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f1f1f1;
+  border-left: 4px solid #007BFF;
+  font-style: italic;
+  color: #555;
 }
