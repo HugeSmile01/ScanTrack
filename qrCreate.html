@@ -41,11 +41,11 @@
   <h1>QR Code Generator</h1>
   <form id="qrForm">
     <label for="studentId">Student ID:</label>
-    <input type="text" id="studentId" placeholder="Enter Student ID" required>
+    <input type="number" id="studentId" placeholder="Enter Student ID" required>
     <div class="error" id="studentIdError">Please enter a valid Student ID.</div>
 
     <label for="gradeLevel">Grade Level:</label>
-    <input type="text" id="gradeLevel" placeholder="Enter Grade Level" required>
+    <input type="number" id="gradeLevel" placeholder="Enter Grade Level" required>
     <div class="error" id="gradeLevelError">Please enter a valid Grade Level.</div>
 
     <label for="studentName">Student Name:</label>
@@ -58,6 +58,7 @@
   <div id="qrCodeContainer"></div>
   <button id="downloadBtn">Download QR Code</button>
 </div>
+    
 <script src="/ScanTrack/Script/qrCreate.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
 </body>
