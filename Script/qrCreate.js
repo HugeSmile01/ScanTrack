@@ -34,8 +34,6 @@ document.getElementById('qrForm').addEventListener('submit', function(e) {
 
   // Clear previous QR code and messages
   const qrCodeContainer = document.getElementById('qrCodeContainer');
-  qrCodeContainer.innerHTML = '';
-  qrCodeContainer.style.display = 'none';
   document.getElementById('successMessage').style.display = 'none';
   document.getElementById('downloadBtn').style.display = 'none';
 
