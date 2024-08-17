@@ -1,14 +1,15 @@
  // Initialize Firebase (use your own configuration)
- const firebaseConfig = {
-   apiKey: "AIzaSyBzpUkxIpekZHhVUCXabTCZyCmUs9bhMD8",
-   authDomain: "qrattendance-hnhs.firebaseapp.com",
-   projectId: "qrattendance-hnhs",
-   storageBucket: "qrattendance-hnhs.appspot.com",
-   messagingSenderId: "309027536444",
-   appId: "1:309027536444:web:d8c5ec8451c1b8e6ea4d39",
-   measurementId: "G-MTJV7RM6PX"
- };
- firebase.initializeApp(firebaseConfig);
+          firebaseConfig = {
+          apiKey: process.env.FIREBASE_API_KEY,
+          authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+          projectId: process.env.FIREBASE_PROJECT_ID,
+          storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+          messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+          appId: process.env.FIREBASE_APP_ID,
+          measurementId: process.env.FIREBASE_MEASUREMENT_ID
+        };
+        
+        firebase.initializeApp(firebaseConfig);
 
  document.getElementById('studentIdInput').addEventListener('keypress', function(event) {
    if (event.key === 'Enter') {
