@@ -33,7 +33,7 @@ document.getElementById('qrForm').addEventListener('submit', function(e) {
         loadingSpinner.style.display = 'inline-block';
       
         // Generate QR code content
-        const qrContent = `ID: ${studentId}, Grade: ${gradeLevel}, Name: ${studentName}`;
+        const qrContent = `${studentId}, ${gradeLevel}, ${studentName}`;
       
         try {
           // Generate QR code
