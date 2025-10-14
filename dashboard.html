@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10AC84">
+
+<meta name="theme-color" content="#10AC84">
+
+  <title>ScanTrack – Dashboard</title>
+
+  <!-- MDL core -->
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- Firebase App (core SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  
+  <!-- Firebase Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  
+  <!-- Firebase Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="Script/login.js" type="text/javascript" charset="utf-8"></script>
+
+  <style>
+    /* ChatGPT dark‑mode palette */
+    :root {
+      --bg-main: #202124;
+      --bg-header: #303134;
+      --bg-drawer: #171717;
+      --text-primary: #E8EAED;
+      --text-secondary: #B0B0B0;
+      --accent:     #10AC84;
+    }
+
+    body, .mdl-layout__content {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+    }
+    a { 
+      color: var(--accent); 
+    }
+    blockquote {
+  text-indent: 0;
+  margin-left: 0;
+}
+
+    /* Header */
+    .mdl-layout__header {
+      background-color: var(--bg-header);
+      color: var(--text-primary) !important;
+    }
+    .mdl-layout-title {
+      font-size: 1.4rem;
+      color: inherit;
+    }
+
+    /* Drawer */
+    .mdl-layout__drawer {
+      background-color: var(--bg-drawer);
+      color: var(--text-primary);
+    }
+    .demo-drawer-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg-header);
+    }
+    
+    .avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* space between avatar and email */
+  padding: 16px;
+}
+
+.demo-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+#user-email {
+  font-size: 14px;
+  color: #ddd;
+  word-break: break-word;
+}.avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between avatar and email */
+  padding: 16px;
+}
+
+.demo-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+#user-email {
+  font-size: 14px;
+  color: #ddd;
+  word-break: break-word;
+}
+
+    .mdl-navigation__link {
+      display: flex;
+      align-items: center;
+      color: var(--text-primary) !important;
+      padding: 12px 24px;
+    }
+    .mdl-navigation__link .material-icons {
+      margin-right: 16px;
+      color: var(--accent);
+    }
+    .mdl-navigation__link:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Search bar & menus */
+    .mdl-textfield__input,
+    .mdl-textfield__label {
+      color: var(--text-primary) !important;
+    }
+    .mdl-textfield__expandable-holder {
+      background: rgba(255,255,255,0.1);
+    }
+    .mdl-button--icon .material-icons {
+      color: var(--text-primary);
+    }
+
+    /* Content area padding */
+    .page-content {
+      padding: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .menu-link {
+  all: unset;
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  color: #black;
+  /* ChatGPT-style dark mode text */
+  font-family: "Roboto", sans-serif;
+}
+
+.menu-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+.mdl-card {
+  background-color: var(--bg-header);
+  color: var(--text-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+  </style>
+</head>
+<body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    
+    <!-- Header -->
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Drawer toggle -->
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-layout__drawer-button">
+          <i class="material-icons">menu</i>
+        </button>
+        <span class="mdl-layout-title">ScanTrackSys</span>
+        <div class="mdl-layout-spacer"></div>
+        
+        <!-- More icon menu -->
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+          <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+  <li class="mdl-menu__item"><a href="about.html" style="color: black; text-decoration: none;">About</a></li>
+  <li class="mdl-menu__item"><a href="contact.html" style="color: black; text-decoration: none;">Contact</a></li>
+  <li class="mdl-menu__item"><a href="legal.html" style="color: black; text-decoration: none;">Legal information</a></li>
+</ul>
+      </div>
+    </header>
+
+    <!-- Drawer -->
+    <div class="mdl-layout__drawer">
+<header class="demo-drawer-header" style="display: flex; flex-direction: column; align-items: flex-start;">
+  <img src="images/user.png" class="demo-avatar" style="width: 52px; height: 52px;">
+  <div class="demo-avatar-dropdown" style="margin-top: 8px;">
+<span id="user-email">hello@example.com</span>
+    <div class="mdl-layout-spacer"></div>
+  </div>
+</header>
+<nav class="mdl-navigation">
+  <a class="mdl-navigation__link" href="index.html"><i class="material-icons">home</i>Home</a>
+  <a class="mdl-navigation__link" id="dashboard-link" href="dashboard.html" style="display:none;"><i class="material-icons">dashboard</i>Dashboard</a>
+  <a class="mdl-navigation__link" href="search.html"><i class="material-icons">search</i>Search</a>
+  <a class="mdl-navigation__link" href="docs.html"><i class="material-icons">library_books</i>Docs</a>
+  <a class="mdl-navigation__link" href="support.html"><i class="material-icons">support</i>Support</a>
+  <a class="mdl-navigation__link" id="scanner-link" href="scanner.html" style="display:none;"><i class="material-icons">qr_code_scanner</i>Scanner</a>
+<a class="mdl-navigation__link" href="chatbot.html" style="display:none;" id="chatbot-link"><i class="material-icons">smart_toy</i>Chatbot</a>
+  <a class="mdl-navigation__link" href="login.html"><i class="material-icons">login</i>Login</a>
+<a class="mdl-navigation__link" href="#" id="logout-link" style="display: none;"><i class="material-icons">logout</i>Logout</a>
+
+</nav>
+
+    </div>
+    
+    <main class="mdl-layout__content">
+  <div class="page-content">
+
+    <!-- Teacher Info -->
+    <div class="mdl-card mdl-shadow--2dp" style="padding: 24px; margin-bottom: 32px;">
+      <h4>Teacher Information</h4>
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--6-col">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%;">
+            <input class="mdl-textfield__input" type="text" id="teacher-name-input">
+            <label class="mdl-textfield__label" for="teacher-name-input">Enter your full name...</label>
+          </div>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <button id="set-teacher-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">
+            Set
+          </button>
+        </div>
+        <div class="mdl-cell mdl-cell--12-col" style="margin-top: 16px;">
+          <strong>Name:</strong> <span id="teacher-name-display"></span><br>
+          <strong>Date:</strong> <span id="current-date" style="color: var(--text-secondary);"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="mdl-card mdl-shadow--2dp" style="padding: 24px; margin-bottom: 32px;">
+      <h4>Filter Attendance</h4>
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--4-col">
+          <label for="grade-filter">Grade</label>
+          <select id="grade-filter" class="mdl-textfield__input" style="width: 100%; padding: 12px; border-radius: 4px;"></select>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <label for="class-filter">Class</label>
+          <select id="class-filter" class="mdl-textfield__input" style="width: 100%; padding: 12px; border-radius: 4px;"></select>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <label for="date-filter">Date</label>
+          <input type="date" id="date-filter" class="mdl-textfield__input" style="width: 100%; padding: 12px; border-radius: 4px;">
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="mdl-card mdl-shadow--2dp" style="padding: 24px; margin-bottom: 32px;">
+      <h4>Attendance Records</h4>
+      <div style="overflow-x: auto;">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width: 100%;">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Student ID</th>
+              <th class="mdl-data-table__cell--non-numeric">Student Name</th>
+              <th class="mdl-data-table__cell--non-numeric">Class</th>
+              <th class="mdl-data-table__cell--non-numeric">Grade</th>
+              <th class="mdl-data-table__cell--non-numeric">Room</th>
+              <th class="mdl-data-table__cell--non-numeric">Status</th>
+              <th class="mdl-data-table__cell--non-numeric">Timestamp</th>
+              <th class="mdl-data-table__cell--non-numeric">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="attendance-body">
+            <!-- Filled by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Attendance Statistics -->
+    <div class="mdl-card mdl-shadow--2dp" style="padding: 24px; margin-bottom: 32px;">
+      <h4>Summary</h4>
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--4-col">
+          <strong>Total Present:</strong> <span id="totalPresent" style="color: #27ae60;">0</span>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <strong>Total Absent:</strong> <span id="totalAbsent" style="color: #e74c3c;">0</span>
+        </div>
+        <div class="mdl-cell mdl-cell--4-col">
+          <strong>Total Excused:</strong> <span id="totalExcused" style="color: #3498db;">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SF2 Download Section -->
+    <div class="mdl-card mdl-shadow--2dp" style="padding: 24px; margin-bottom: 32px;">
+      <h4>Download Attendance Records (DepEd SF2 Format)</h4>
+      <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--3-col">
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="filter-1day">
+            <input type="radio" id="filter-1day" class="mdl-radio__button" name="time-filter" value="1day" checked>
+            <span class="mdl-radio__label">1 Day</span>
+          </label>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="filter-1week">
+            <input type="radio" id="filter-1week" class="mdl-radio__button" name="time-filter" value="1week">
+            <span class="mdl-radio__label">1 Week</span>
+          </label>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="filter-1month">
+            <input type="radio" id="filter-1month" class="mdl-radio__button" name="time-filter" value="1month">
+            <span class="mdl-radio__label">1 Month</span>
+          </label>
+        </div>
+        <div class="mdl-cell mdl-cell--3-col">
+          <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="filter-1year">
+            <input type="radio" id="filter-1year" class="mdl-radio__button" name="time-filter" value="1year">
+            <span class="mdl-radio__label">1 Year</span>
+          </label>
+        </div>
+      </div>
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect" onclick="downloadAttendance()">
+        Download SF2 CSV
+      </button>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="mdl-card mdl-shadow--2dp" style="padding: 24px;">
+      <h4>Attendance Graphs</h4>
+      <canvas id="attendanceBarChart" height="100"></canvas>
+      <canvas id="attendanceLineChart" height="100" style="margin-top: 40px;"></canvas>
+    </div>
+
+  </div>
+</main>
+
+
+
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="Script/dashboard.js" type="text/javascript" charset="utf-8"></script>
+
+  </div>
+  </div>
+</body>
+</html>

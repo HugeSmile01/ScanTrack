@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriAssist AI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.2.0/github-markdown-dark.css" rel="stylesheet">
+  <link rel="stylesheet" href="Css/chatbot.css" type="text/css" media="all" />
+</head>
+<body>
+  <div class="app-container">
+    <div class="app-header">
+      AgriAssist AI
+      <span class="chat-status" id="chatStatus">Online</span>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div id="typingIndicator" class="message bot-message" style="display: none;">
+        <div class="message-content">Typing...</div>
+      </div>
+    </div>
+    <div class="chat-input">
+      <input id="userInput" type="text" placeholder="Type your message..." maxlength="500" autocomplete="off">
+      <input type="file" id="imageUpload" accept="image/*" onchange="handleImageUpload()">
+      <button id="sendButton" onclick="handleInput()">Send</button>
+    </div>
+    <p style="color: gray; font-size: 10px; text-align: center;">Credits to: Dev. John Rish Ladica</p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+
+  <script>
+    const SYSTEM_PROMPT_TEXT = `You are AgriAssist, a smart AI assistant designed to support farmers in managing their agricultural practices. Your primary role is to assist users in identifying soil conditions, pests, and diseases using visual AI analysis. You provide guidance on best practices for crop management, pest control, and soil health. Users can upload images of soil samples or pests, and you will analyze them to provide insights and recommendations. You also help farmers with general inquiries about crop care, weather patterns, and sustainable farming techniques. Your tone is professional, helpful, and easy to understand, especially for farmers who may not be tech-savvy.`;
+
+    const conversationHistory = [
+      { role: "user", text: SYSTEM_PROMPT_TEXT }
+    ];
+
+    const SECURITY_CONFIG = {
+      API_ENDPOINT: 'https://generativelanguage.googleapis.com/v1beta/models/',
+      MODEL: 'gemini-1.5-pro-latest',
+      MAX_RESPONSE_LENGTH: 5000,
+      RATE_LIMIT: { REQUESTS: 20, INTERVAL: 60000 }
+    };
+
+    const rateLimiter = {
+      lastRequest: Date.now(),
+      requestCount: 0,
+      check() {
+        const now = Date.now();
+        if (now - this.lastRequest > SECURITY_CONFIG.RATE_LIMIT.INTERVAL) {
+          this.requestCount = 0;
+          this.lastRequest = now;
+        }
+        if (this.requestCount >= SECURITY_CONFIG.RATE_LIMIT.REQUESTS) {
+          throw new Error('Chatbot is at rest.');
+        }
+        this.requestCount++;
+      }
+    };
+
+    let offlineQueue = [];
+    window.addEventListener('online', () => {
+      const statusElement = document.getElementById('chatStatus');
+      statusElement.textContent = 'Online';
+      statusElement.style.color = ''; // Reset to default color
+      while (offlineQueue.length) {
+        const { history, resolve, reject } = offlineQueue.shift();
+        sendPrompt(history).then(resolve).catch(reject);
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      const statusElement = document.getElementById('chatStatus');
+      statusElement.textContent = 'Offline';
+      statusElement.style.color = 'red';
+      addMessage('You are offline. Messages will send when reconnected.', false);
+    });
+
+    function sanitizeInput(text) {
+      return text.replace(/[^a-zA-Z0-9 .,?!@'\-]/g, '');
+    }
+    function sanitizeOutput(text) {
+      const ta = document.createElement('textarea');
+      ta.textContent = text;
+      return ta.innerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function showTypingIndicator(show) {
+      const ti = document.getElementById('typingIndicator');
+      if (ti) ti.style.display = show ? 'flex' : 'none';
+      autoScroll();
+    }
+
+    function autoScroll() {
+      const cb = document.getElementById('chatBody');
+      if (cb.scrollHeight - cb.scrollTop - cb.clientHeight < 50) {
+        cb.scrollTop = cb.scrollHeight;
+      }
+    }
+
+    function addMessage(msg, isUser ) {
+      const chatBody = document.getElementById('chatBody');
+      const wrapper = document.createElement('div');
+      wrapper.className = `message-wrapper ${isUser  ? 'user-message' : 'bot-message'}`;
+      
+      const m = document.createElement('div');
+      m.className = `message ${isUser  ? 'user-message' : 'bot-message'}`;
+      
+      const c = document.createElement('div');
+      c.className = 'message-content markdown-body';
+      c.innerHTML = isUser  ? sanitizeOutput(msg) : formatResponse(msg);
+      
+      const btn = document.createElement('button');
+      btn.className = 'copy-response-button';
+      btn.innerText = 'Copy';
+      
+      // Click handler for message container
+      m.addEventListener('click', function(e) {
+        if (e.target.classList.contains('copy-response-button')) return;
+        document.querySelectorAll('.message-wrapper.active').forEach(el => el.classList.remove('active'));
+        wrapper.classList.toggle('active');
+      });
+      
+      // Click handler for copy button
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const text = c.innerText.trim();
+        navigator.clipboard.writeText(text);
+        btn.innerText = 'Copied!';
+        setTimeout(() => {
+          btn.innerText = 'Copy';
+          wrapper.classList.remove('active');
+        }, 2000);
+      });
+      
+      m.appendChild(c);
+      wrapper.appendChild(m);
+      wrapper.appendChild(btn);
+      
+      const ti = document.getElementById('typingIndicator');
+      chatBody.insertBefore(wrapper, ti);
+      autoScroll();
+    }
+
+    function formatResponse(text) {
+      const rawHtml = marked.parse(text);
+      const cleanHtml = DOMPurify.sanitize(rawHtml);
+      const container = document.createElement('div');
+      container.innerHTML = cleanHtml;
+      container.querySelectorAll('pre > code').forEach(codeElem => {
+        const pre = codeElem.parentNode;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-container';
+
+        const btn = document.createElement('button');
+        btn.className = 'copy-response-button';
+        btn.innerText = 'Copy';
+        btn.addEventListener('click', () => {
+          navigator.clipboard.writeText(codeElem.innerText)
+            .then(() => {
+              btn.innerText = 'Copied!';
+              setTimeout(() => btn.innerText = 'Copy', 2000);
+            });
+        });
+
+        pre.parentNode.replaceChild(wrapper, pre);
+        wrapper.appendChild(btn);
+        wrapper.appendChild(pre);
+      });
+      return container.innerHTML;
+    }
+
+    async function getAIResponse(history) {
+      const url = `${SECURITY_CONFIG.API_ENDPOINT}${SECURITY_CONFIG.MODEL}:generateContent`;
+      const contents = history.map(msg => ({ role: msg.role, parts: [{ text: msg.text }] }));
+      const body = { systemInstruction: { parts: [{ text: SYSTEM_PROMPT_TEXT }] }, contents };
+
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': 'AIzaSyB0q54ctyevQxpII-K_GI0bLPmhAFxCk5I' // Replace with your actual API key
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) {
+        let msg = `HTTP ${res.status}`;
+        try { msg = (await res.json()).error?.message || msg; } catch {}
+        throw new Error(`⚠️ ${msg}`);
+      }
+
+      const data = await res.json();
+      return data.candidates[0].content.parts[0].text
+        .slice(0, SECURITY_CONFIG.MAX_RESPONSE_LENGTH);
+    }
+
+    async function retryFetch(history, attempts = 3, delay = 500) {
+      try {
+        return await getAIResponse(history);
+      } catch (err) {
+        if (err.message.startsWith('⚠️ HTTP') || attempts <= 1) throw err;
+        await new Promise(r => setTimeout(r, delay));
+        return retryFetch(history, attempts - 1, delay * 2);
+      }
+    }
+
+    async function sendPrompt(history) {
+      try {
+        rateLimiter.check();
+        return await getAIResponse(history);
+      } catch (err) {
+        if (!navigator.onLine) {
+          return new Promise((resolve, reject) => {
+            offlineQueue.push({ history, resolve, reject });
+          });
+        }
+        return retryFetch(history);
+      }
+    }
+
+    function handleInput() {
+      const inputEl = document.getElementById('userInput');
+      const raw = inputEl.value.trim();
+      const prompt = sanitizeInput(raw);
+
+      if (!prompt) return;
+
+      addMessage(prompt, true);
+      conversationHistory.push({ role: 'user', text: prompt });
+
+      inputEl.value = '';
+      showTypingIndicator(true);
+
+      // Check if the input is an image upload request
+      if (prompt.toLowerCase().includes('image') || prompt.toLowerCase().includes('upload')) {
+        analyzeImage().then(response => {
+          addMessage(response, false);
+          conversationHistory.push({ role: 'assistant', text: response });
+        });
+      } else {
+        sendPrompt(conversationHistory)
+          .then(res => {
+            addMessage(res, false);
+            conversationHistory.push({ role: 'assistant', text: res });
+          })
+          .catch(err => addMessage(err.message || '⚠️ Error', false))
+          .finally(() => showTypingIndicator(false));
+      }
+    }
+
+    function handleImageUpload() {
+      const fileInput = document.getElementById('imageUpload');
+      const file = fileInput.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const imgSrc = event.target.result;
+          addMessage(`Image uploaded: [Preview not available]`, true);
+          // Call the analyzeImage function here if needed
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    async function analyzeImage() {
+      // Logic to handle image upload and analysis
+      // This could involve sending the image to a visual AI service and receiving a response
+
+      // Example response (this should be replaced with actual analysis logic)
+      return "The uploaded image shows signs of aphid infestation. Consider using insecticidal soap for treatment.";
+    }
+
+    let debounceTimer;
+    document.getElementById('userInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(handleInput, 300);
+      }
+    });
+
+    window.onload = () => {
+      const cb = document.getElementById('chatBody');
+      if (cb.children.length <= 1) {
+        addMessage("How can I assist you today?", false);
+      }
+    };
+  </script>
+</body>
+</html>

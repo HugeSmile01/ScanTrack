@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10AC84">
+
+<meta name="theme-color" content="#10AC84">
+
+  <title>ScanTrack – Home</title>
+
+  <!-- MDL core -->
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css">
+  <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  
+    <!-- Firebase App (core SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  
+  <!-- Firebase Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  
+  <!-- Firebase Realtime Database -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="Script/login.js" type="text/javascript" charset="utf-8"></script>
+  <style>
+    /* ChatGPT dark‑mode palette */
+    :root {
+      --bg-main: #202124;
+      --bg-header: #303134;
+      --bg-drawer: #171717;
+      --text-primary: #E8EAED;
+      --text-secondary: #B0B0B0;
+      --accent:     #10AC84;
+    }
+
+    body, .mdl-layout__content {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+    }
+    a { 
+      color: var(--accent); 
+    }
+    blockquote {
+  text-indent: 0;
+  margin-left: 0;
+}
+
+    /* Header */
+    .mdl-layout__header {
+      background-color: var(--bg-header);
+      color: var(--text-primary) !important;
+    }
+    .mdl-layout-title {
+      font-size: 1.4rem;
+      color: inherit;
+    }
+
+    /* Drawer */
+    .mdl-layout__drawer {
+      background-color: var(--bg-drawer);
+      color: var(--text-primary);
+    }
+    .demo-drawer-header {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: var(--bg-header);
+    }
+    
+    .avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* space between avatar and email */
+  padding: 16px;
+}
+
+.demo-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+#user-email {
+  font-size: 14px;
+  color: #ddd;
+  word-break: break-word;
+}.avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* space between avatar and email */
+  padding: 16px;
+}
+
+.demo-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+#user-email {
+  font-size: 14px;
+  color: #ddd;
+  word-break: break-word;
+}
+
+    .mdl-navigation__link {
+      display: flex;
+      align-items: center;
+      color: var(--text-primary) !important;
+      padding: 12px 24px;
+    }
+    .mdl-navigation__link .material-icons {
+      margin-right: 16px;
+      color: var(--accent);
+    }
+    .mdl-navigation__link:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Search bar & menus */
+    .mdl-textfield__input,
+    .mdl-textfield__label {
+      color: var(--text-primary) !important;
+    }
+    .mdl-textfield__expandable-holder {
+      background: rgba(255,255,255,0.1);
+    }
+    .mdl-button--icon .material-icons {
+      color: var(--text-primary);
+    }
+
+    /* Content area padding */
+    .page-content {
+      padding: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    .menu-link {
+  all: unset;
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  color: #black;
+  /* ChatGPT-style dark mode text */
+  font-family: "Roboto", sans-serif;
+}
+
+.menu-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+  </style>
+</head>
+<body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+    
+    <!-- Header -->
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Drawer toggle -->
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-layout__drawer-button">
+          <i class="material-icons">menu</i>
+        </button>
+        <span class="mdl-layout-title">ScanTrackSys</span>
+        <div class="mdl-layout-spacer"></div>
+        
+        <!-- More icon menu -->
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
+          <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
+  <li class="mdl-menu__item"><a href="about.html" style="color: black; text-decoration: none;">About</a></li>
+  <li class="mdl-menu__item"><a href="#" style="color: black; text-decoration: none;" onclick="showContactInfo()">Contact</a></li>
+  <li class="mdl-menu__item"><a href="legal.html" style="color: black; text-decoration: none;">Legal information</a></li>
+</ul>
+      </div>
+    </header>
+
+    <!-- Drawer -->
+    <div class="mdl-layout__drawer">
+<header class="demo-drawer-header" style="display: flex; flex-direction: column; align-items: flex-start;">
+  <img src="images/user.png" class="demo-avatar" style="width: 52px; height: 52px;">
+  <div class="demo-avatar-dropdown" style="margin-top: 8px;">
+<span id="user-email">hello@example.com</span>
+
+    <div class="mdl-layout-spacer"></div>
+  </div>
+</header>
+<nav class="mdl-navigation">
+  <a class="mdl-navigation__link" href="index.html"><i class="material-icons">home</i>Home</a>
+  <a class="mdl-navigation__link" id="dashboard-link" href="dashboard.html" style="display:none;"><i class="material-icons">dashboard</i>Dashboard</a>
+  <a class="mdl-navigation__link" href="search.html"><i class="material-icons">search</i>Search</a>
+  <a class="mdl-navigation__link" href="docs.html"><i class="material-icons">library_books</i>Docs</a>
+  <a class="mdl-navigation__link" href="support.html"><i class="material-icons">support</i>Support</a>
+  <a class="mdl-navigation__link" id="scanner-link" href="scanner.html" style="display:none;"><i class="material-icons">qr_code_scanner</i>Scanner</a>
+  <a class="mdl-navigation__link" href="chatbot.html" style="display:none;" id="chatbot-link"><i class="material-icons">smart_toy</i>Chatbot</a>
+  <a class="mdl-navigation__link" href="login.html"><i class="material-icons">login</i>Login</a>
+<a class="mdl-navigation__link" href="#" id="logout-link" style="display: none;"><i class="material-icons">logout</i>Logout</a>
+
+</nav>
+
+    </div>
+
+<main class="mdl-layout__content">
+  <div class="page-content">
+
+    <section style="text-align: center; padding: 80px 20px; background: var(--bg-header);">
+      <h1 class="mdl-typography--display-1" style="color: var(--text-primary); margin-bottom: 16px;">About ScanTrackSys</h1>
+      <p class="mdl-typography--subhead" style="color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+        ScanTrackSys is an innovative QR code-based attendance tracking system designed for DepEd teachers. With this system, teachers can easily manage student attendance, generate QR codes, and export reports in the DepEd SF2 format.
+      </p>
+    </section>
+
+    <section style="padding: 60px 20px; max-width: 900px; margin: auto; line-height: 1.8;">
+      <h3>System Features</h3>
+      <ul>
+        <li><strong>QR Code Generation:</strong> Generate unique QR codes for students using their LRN and other information.</li>
+        <li><strong>Attendance Tracking:</strong> Track student attendance in real-time using QR code scans.</li>
+        <li><strong>Export Reports:</strong> Easily export attendance records in the DepEd SF2 format for official use.</li>
+        <li><strong>Secure Login:</strong> Teacher authentication using official DepEd email accounts.</li>
+      </ul>
+
+      <h3>Our Mission</h3>
+      <p>ScanTrackSys aims to streamline the process of tracking attendance for DepEd teachers and improve the accuracy of records while ensuring a smooth and user-friendly experience. We are committed to providing a reliable tool for teachers to manage their classrooms more efficiently.</p>
+
+      <h3>Contact Information</h3>
+      <p>For inquiries or support, please visit our <a href="#" id="contact-link">Contact</a>
+ page.</p>
+
+      <h3>Credits</h3>
+      <p>This system was developed by <a href="https://github.com/HugeSmile01" target="_blank">HugeSmile01</a> and is open-source. Feel free to contribute on our <a href="https://github.com/HugeSmile01/ScanTrack" target="_blank">GitHub repository</a>.</p>
+    </section>
+
+  </div>
+</main>
+
+
+  </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function showContactInfo() {
+    Swal.fire({
+      title: 'Contact Information',
+      icon: 'info',
+      html: `
+        <p>You can reach out through the following channels:</p>
+        <ul style="text-align: left; line-height: 1.6; margin: 0; padding-left: 1em;">
+          <li><strong>Email:</strong> <a href="mailto:johnrishladica@gmail.com">johnrishladica@gmail.com</a></li>
+          <li><strong>Facebook:</strong> <a href="https://facebook.com/HugeSmile.org" target="_blank">HugeSmile.org</a></li>
+          <li><strong>GitHub:</strong> <a href="https://github.com/HugeSmile01" target="_blank">HugeSmile01</a></li>
+        </ul>
+      `,
+      confirmButtonText: 'Close',
+      background: '#2d2d2d',
+      color: '#E8EAED'
+    });
+  }
+
+  // Attach the event listener
+  document.addEventListener("DOMContentLoaded", function () {
+    const contactLink = document.getElementById("contact-link");
+    if (contactLink) {
+      contactLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        showContactInfo();
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
