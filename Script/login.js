@@ -1,36 +1,21 @@
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyADtb-DkiKLntUMp4IVMLOdTLI5kBDC_d0",
-    authDomain: "scantr4ck.firebaseapp.com",
-    projectId: "scantr4ck",
-    storageBucket: "scantr4ck.appspot.com",
-    messagingSenderId: "679035674854",
-    appId: "1:679035674854:web:6dcb05906d680dc59edb27",
-    measurementId: "G-Q9YHK207XW"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  function logout() {
-    auth.signOut().then(() => {
-      Swal.fire({
-        icon: 'success',
-        title: 'Signed Out',
-        text: 'You have been signed out successfully.',
-        showConfirmButton: false,
-        timer: 1500
-      });
-
-      updateUI(null);
-    }).catch(error => {
-      Swal.fire({
-        icon: 'error',
-        title: 'Sign Out Failed',
-        text: `Error: ${error.message}`
-      });
+function logout() {
+  auth.signOut().then(() => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Signed Out',
+      text: 'You have been signed out successfully.',
+      showConfirmButton: false,
+      timer: 1500
     });
-  }
+    updateUI(null);
+  }).catch(error => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sign Out Failed',
+      text: `Error: ${error.message}`
+    });
+  });
+}
 
 function showContactInfo() {
   Swal.fire({
@@ -50,16 +35,12 @@ function showContactInfo() {
   });
 }
 
-
-
-
-
 function updateUI(user) {
   const loginLink = document.querySelector('a[href="login.html"]');
   const logoutLink = document.getElementById('logout-link');
   const dashboardLink = document.getElementById('dashboard-link');
   const scannerLink = document.getElementById('scanner-link');
-  const chatbotLink = document.getElementById('chatbot-link'); // Add this
+  const chatbotLink = document.getElementById('chatbot-link');
   const emailSpan = document.querySelector('.demo-avatar-dropdown span');
 
   if (user) {
@@ -67,21 +48,19 @@ function updateUI(user) {
     if (logoutLink) logoutLink.style.display = 'flex';
     if (dashboardLink) dashboardLink.style.display = 'flex';
     if (scannerLink) scannerLink.style.display = 'flex';
-    if (chatbotLink) chatbotLink.style.display = 'flex'; // Show when logged in
+    if (chatbotLink) chatbotLink.style.display = 'flex';
     if (emailSpan) emailSpan.textContent = user.email;
   } else {
     if (loginLink) loginLink.style.display = 'flex';
     if (logoutLink) logoutLink.style.display = 'none';
     if (dashboardLink) dashboardLink.style.display = 'none';
     if (scannerLink) scannerLink.style.display = 'none';
-    if (chatbotLink) chatbotLink.style.display = 'none'; // Hide when not logged in
+    if (chatbotLink) chatbotLink.style.display = 'none';
     if (emailSpan) emailSpan.textContent = 'hello@example.com';
   }
 }
 
-  
-
-  auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(user => {
   updateUI(user);
   if (user) {
     const domain = user.email.split('@')[1];
@@ -95,24 +74,19 @@ function updateUI(user) {
         showConfirmButton: false,
         timer: 1500
       });
-
-      // Mark it so we don't show it again during this session
       sessionStorage.setItem('welcome-shown', 'true');
     }
   } else {
-    // Clear the flag if user signs out
     sessionStorage.removeItem('welcome-shown');
   }
 });
 
-
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const logoutLink = document.getElementById('logout-link');
-    if (logoutLink) {
-      logoutLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        logout();
-      });
-    }
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  const logoutLink = document.getElementById('logout-link');
+  if (logoutLink) {
+    logoutLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      logout();
+    });
+  }
+});

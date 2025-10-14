@@ -31,7 +31,6 @@ setTeacherBtn.addEventListener('click', () => {
 function fetchAttendanceData(teacherName) {
     const sanitizedTeacherName = teacherName.replace(/[.#$[\]]/g, '_');
     const dbPath = `attendance/${sanitizedTeacherName}`;
-    console.log(`Fetching data from: ${dbPath}`);
     
     firebase.database().ref(dbPath).on('value', (snapshot) => {
         const data = snapshot.val();

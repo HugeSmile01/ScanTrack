@@ -1,17 +1,3 @@
-    const firebaseConfig = {
-  apiKey: "AIzaSyADtb-DkiKLntUMp4IVMLOdTLI5kBDC_d0",
-  authDomain: "scantr4ck.firebaseapp.com",
-  projectId: "scantr4ck",
-  storageBucket: "scantr4ck.appspot.com",
-  messagingSenderId: "679035674854",
-  appId: "1:679035674854:web:6dcb05906d680dc59edb27",
-  measurementId: "G-Q9YHK207XW"
-};
-
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-
-// DOM Elements
 const authForm = document.getElementById('auth-form');
 const formTitle = document.getElementById('form-title');
 const submitButton = document.getElementById('submit-button');
@@ -23,10 +9,8 @@ const forgotPasswordLink = document.getElementById('forgot-password-link');
 const policyCheckboxGroup = document.getElementById('policy-checkbox-group');
 const policyCheckbox = document.getElementById('policy-checkbox');
 
-// State
 let isSignUp = false;
 
-// Event Listeners
 authForm.addEventListener('submit', handleFormSubmit);
 toggleLink.addEventListener('click', toggleForm);
 googleSignInButton.addEventListener('click', signInWithGoogle);
